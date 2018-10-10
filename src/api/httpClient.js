@@ -7,10 +7,10 @@ const get = (url) => {
 }
 
 // const get = (url) => {
-    // return axios(url, { headers: {
-    // "Access-Control-Allow-Origin": "*", 
-    // "Access-Control-Allow-Methods": "GET",
-    // "Access-Control-Allow-Headers": "Origin, Content-Type, X-Auth-Token"} } )
+//     return axios(url, { headers: {
+//     "Access-Control-Allow-Origin": "*", 
+//     "Access-Control-Allow-Methods": "GET",
+//     "Access-Control-Allow-Headers": "Origin, Content-Type, X-Auth-Token"} } )
 // }
 
 const HttpClient = {

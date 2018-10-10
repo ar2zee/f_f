@@ -15,25 +15,35 @@ class App extends React.Component {
 		latitude: undefined,
 		longitude: undefined,
 		temp: undefined,
-		relativeHumidity: undefined ,
-		cloudCoverage: undefined ,
-		visibility: undefined ,
-		windSpeed: undefined ,
-		windDirection: undefined ,
+		relativeHumidity: undefined,
+		cloudCoverage: undefined,
+		visibility: undefined,
+		windSpeed: undefined,
+		windDirection: undefined,
+		forecastStartTime_1: undefined,
+		forecastWindSpeed_1: undefined,
+		forecastWindDirection_1: undefined,
+		forecastStartTime_2: undefined,
+		forecastWindSpeed_2: undefined,
+		forecastWindDirection_2: undefined,
 		error: undefined
   }
   
 	getAirportData = async (e) => {
-		e.preventDefault()
+		e.preventDefault();
     	const identifier = e.target.elements.identifier.value;
 
-		const AirportInfoData = await AirportsAPI.getAirportData(identifier);
+		const AirportInfoData = await AirportsAPI.getAirportsData(identifier);
 		const AirportWeatherData = await AirportsAPI.getAirportWeather(identifier);
+	
+	    const {icao, name, runways, latitude, longitude} = AirportInfoData.data.airport.results;
+		const {tempC, relativeHumidity, cloudLayers, visibility, wind} = AirportWeatherData.data.report.conditions;
+		const forecast_1 = AirportWeatherData.data.report.forecast.conditions[1];
+		const forecast_2 = AirportWeatherData.data.report.forecast.conditions[2];
 
-    // console.log(AirportInfoData);
-    console.log(AirportWeatherData.data.report);
-    const {icao, name, runways, latitude, longitude} = AirportInfoData.data.airport.results
-    const {tempC, relativeHumidity, cloudLayers, visibility, wind} = AirportWeatherData.data.report.conditions
+	
+		const cloudLayersArray = cloudLayers.map(element => element)
+		const coverageValueFromCloudLayersArray = cloudLayersArray.reduce((prev, current) => (prev.altitudeFt > current.altitudeFt) ? prev : current);
 		if (identifier) {
 		this.setState({
 			identifier: icao,
@@ -43,10 +53,16 @@ class App extends React.Component {
 			longitude: longitude,
 			temp: (tempC * 9/5) + 32,
 			relativeHumidity: relativeHumidity ,
-			// cloudCoverage: undefined ,
+			cloudCoverage: coverageValueFromCloudLayersArray.coverage,
 			visibility: visibility.distanceSm ,
 			windSpeed: (wind.speedKts * 1.15077945).toFixed(3),
-			windDirection: wind.direction ,
+			windDirection: wind.direction,
+			forecastStartTime_1: forecast_1.period.dateStart,
+			forecastStartTime_2: forecast_2.period.dateStart,
+			forecastWindSpeed_1: (forecast_1.wind.speedKts * 1.15077945).toFixed(3),
+			forecastWindSpeed_2: (forecast_2.wind.speedKts * 1.15077945).toFixed(3),
+			forecastWindDirection_1: forecast_1.wind.direction,
+			forecastWindDirection_2: forecast_2.wind.direction,
 			error: ''
 			});
 		} else {
@@ -57,11 +73,17 @@ class App extends React.Component {
 			latitude: undefined,
 			longitude: undefined,
 			temp: undefined,
-			relativeHumidity: undefined ,
-			cloudCoverage: undefined ,
-			visibility: undefined ,
-			windSpeed: undefined ,
-			windDirection: undefined ,
+			relativeHumidity: undefined,
+			cloudCoverage: undefined,
+			visibility: undefined,
+			windSpeed: undefined,
+			windDirection: undefined,
+			forecastStartTime_1: undefined,
+			forecastWindSpeed_1: undefined,
+			forecastWindDirection_1: undefined,
+			forecastStartTime_2: undefined,
+			forecastWindSpeed_2: undefined,
+			forecastWindDirection_2: undefined,	
 			error: 'Please Enter the Value.'
 			});
 		}
@@ -78,8 +100,9 @@ class App extends React.Component {
 										
 								</div>
 								<div className="col-xs-7 form-container">
-									<Form getWeather={this.getAirportData}/>
+									<Form getAirportData={this.getAirportData}/>
 									<AirportInfo 
+									error={this.state.error}
 									identifier={this.state.identifier}
 									name={this.state.name}
 									runways={this.state.runways}
@@ -87,11 +110,16 @@ class App extends React.Component {
 									longitude={this.state.longitude}
 									temp={this.state.temp}
 									relativeHumidity={this.state.relativeHumidity}
-									// cloudCoverage: undefined ,
+									cloudCoverage={this.state.cloudCoverage}
 									visibility={this.state.visibility}
 									windSpeed={this.state.windSpeed}
 									windDirection={this.state.windDirection}
-									error={this.state.error}
+									forecastStartTime_1={this.state.forecastStartTime_1}
+									forecastStartTime_2={this.state.forecastStartTime_2}
+									forecastWindSpeed_1={this.state.forecastWindSpeed_1}
+									forecastWindSpeed_2={this.state.forecastWindSpeed_2}
+									forecastWindDirection_1={this.state.forecastWindDirection_1}
+									forecastWindDirection_2={this.state.forecastWindDirection_2}
 									/>
 								</div>
 							</div>
