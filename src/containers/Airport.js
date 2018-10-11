@@ -4,6 +4,7 @@ import Titles from "../components/Title";
 import Form from "../components/Form";
 import AirportInfo from "../components/AirportInfo";
 import { AirportsAPI } from '../api/AirportsAPI';
+import * as HelpersFunction from '../utilities/Utility';
 
 
 class App extends Component {
@@ -40,10 +41,7 @@ class App extends Component {
 		const {tempC, relativeHumidity, cloudLayers, visibility, wind} = AirportWeatherData.data.report.conditions;
 		const forecast_1 = AirportWeatherData.data.report.forecast.conditions[1];
 		const forecast_2 = AirportWeatherData.data.report.forecast.conditions[2];
-
-	
-		const cloudLayersArray = cloudLayers.map(element => element)
-        const coverageValueFromCloudLayersArray = cloudLayersArray.reduce((prev, current) => (prev.altitudeFt > current.altitudeFt) ? prev : current);
+          
         
 		if (identifier) {
 		this.setState({
@@ -54,16 +52,16 @@ class App extends Component {
 			longitude: longitude,
 			temp: (tempC * 9/5) + 32,
 			relativeHumidity: relativeHumidity ,
-			cloudCoverage: coverageValueFromCloudLayersArray.coverage,
+			cloudCoverage: HelpersFunction.cloudLayersArray(cloudLayers).coverage,
 			visibilitys: visibility.distanceSm ,
 			windSpeed: (wind.speedKts * 1.15077945).toFixed(3),
 			windDirection: wind.direction,
 			forecastStartTime_1: forecast_1.period.dateStart,
-			forecastStartTime_2: forecast_2.period.dateStart,
 			forecastWindSpeed_1: (forecast_1.wind.speedKts * 1.15077945).toFixed(3),
-			forecastWindSpeed_2: (forecast_2.wind.speedKts * 1.15077945).toFixed(3),
 			forecastWindDirection_1: forecast_1.wind.direction,
-			forecastWindDirection_2: forecast_2.wind.direction,
+			forecastStartTime_2: HelpersFunction.testPeriod(forecast_2),
+			forecastWindSpeed_2: HelpersFunction.testWindSpeed(forecast_2),
+			forecastWindDirection_2: HelpersFunction.testWindDirection(forecast_2),
 			error: ''
 			});
 		} else {
