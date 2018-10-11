@@ -30,3 +30,9 @@ export const testPeriod = (parent) => {
   .reduce((prev, current) => (prev.altitudeFt > current.altitudeFt)
         ? prev : current);
 
+  // wind direction https://stackoverflow.com/questions/7490660/converting-wind-direction-in-angles-to-text-words
+  export const windDirection = (parent) => {
+      const direction = Math.floor((parent.direction / 22.5) + 0.5);
+      const directions = ['N', 'NNE', 'NE', 'ENE', 'E', 'ESE', 'SE', 'SSE', 'S', 'SSW', 'SW', 'WSW', 'W', 'WNW', 'NW', 'NNW'];
+      return directions[(direction % 16)];
+  }

@@ -55,7 +55,7 @@ class App extends Component {
 			cloudCoverage: HelpersFunction.cloudLayersArray(cloudLayers).coverage,
 			visibilitys: visibility.distanceSm ,
 			windSpeed: (wind.speedKts * 1.15077945).toFixed(3),
-			windDirection: wind.direction,
+			windDirection: HelpersFunction.windDirection(wind),
 			forecastStartTime_1: forecast_1.period.dateStart,
 			forecastWindSpeed_1: (forecast_1.wind.speedKts * 1.15077945).toFixed(3),
 			forecastWindDirection_1: forecast_1.wind.direction,
