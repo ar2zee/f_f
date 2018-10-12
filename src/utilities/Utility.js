@@ -32,7 +32,7 @@ export const testPeriod = (parent) => {
 
   // wind direction https://stackoverflow.com/questions/7490660/converting-wind-direction-in-angles-to-text-words
   export const windDirection = (parent) => {
-      const direction = Math.floor((parent.direction / 22.5) + 0.5);
-      const directions = ['N', 'NNE', 'NE', 'ENE', 'E', 'ESE', 'SE', 'SSE', 'S', 'SSW', 'SW', 'WSW', 'W', 'WNW', 'NW', 'NNW'];
-      return directions[(direction % 16)];
+      const WindDirectionFromApi = Math.floor((parent.direction / 22.5) + 0.5);
+      const Winddirections = ['N', 'NNE', 'NE', 'ENE', 'E', 'ESE', 'SE', 'SSE', 'S', 'SSW', 'SW', 'WSW', 'W', 'WNW', 'NW', 'NNW'];
+      return Winddirections[(WindDirectionFromApi % 16)];
   }

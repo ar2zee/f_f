@@ -1,5 +1,6 @@
-import actions from './actionTypes';
+import * as actions from './actionTypes';
 
-export const fetchAirportData = () => ({
-    type: actions.FETCH_AIRPORT_DATA_START
+export const fetchAirportData = (airportIcao) => ({
+    type: actions.FETCH_AIRPORT_DATA_START,
+    airportIcao
 })

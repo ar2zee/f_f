@@ -12,7 +12,7 @@ const sagaMiddleware = createSagaMiddleware();
 export default () => {
     const store = createStore(
         combineReducers({
-            info: informationReducer,
+            information: informationReducer,
             weather: weatherReducer,
             error: errorsReducer
         }),

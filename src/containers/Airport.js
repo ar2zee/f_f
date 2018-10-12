@@ -1,92 +1,23 @@
 import React, {Component} from "react";
+import {connect} from 'react-redux';
 
 import Titles from "../components/Title";
 import Form from "../components/Form";
 import AirportInfo from "../components/AirportInfo";
-import * as AirportsAPI from '../api/AirportsAPI';
-import * as HelpersFunction from '../utilities/Utility';
+import {fetchAirportData, fetchAirportWeather} from '../store/actions/index';
 
 
 class App extends Component {
   
-	state = {
-		identifier: undefined,
-		name: undefined,
-		runways: undefined,
-		latitude: undefined,
-		longitude: undefined,
-		temp: undefined,
-		relativeHumidity: undefined,
-		cloudCoverage: undefined,
-		visibilitys: undefined,
-		windSpeed: undefined,
-		windDirection: undefined,
-		forecastStartTime_1: undefined,
-		forecastWindSpeed_1: undefined,
-		forecastWindDirection_1: undefined,
-		forecastStartTime_2: undefined,
-		forecastWindSpeed_2: undefined,
-		forecastWindDirection_2: undefined,
-		error: undefined
-  }
-  
-	getAirportData = async (e) => {
-		e.preventDefault();
-    	const identifier = e.target.elements.identifier.value;
 
-		const AirportInfoData = await AirportsAPI.getAirportsData(identifier);
-		const AirportWeatherData = await AirportsAPI.getAirportWeather(identifier);
-	
-	    const {icao, name, runways, latitude, longitude} = AirportInfoData.data.airport.results;
-		const {tempC, relativeHumidity, cloudLayers, visibility, wind} = AirportWeatherData.data.report.conditions;
-		const forecast_1 = AirportWeatherData.data.report.forecast.conditions[1];
-		const forecast_2 = AirportWeatherData.data.report.forecast.conditions[2];
-          
-        
-		if (identifier) {
-		this.setState({
-			identifier: icao,
-			name: name,
-			runways: runways,
-			latitude: latitude,
-			longitude: longitude,
-			temp: (tempC * 9/5) + 32,
-			relativeHumidity: relativeHumidity ,
-			cloudCoverage: HelpersFunction.cloudLayersArray(cloudLayers).coverage,
-			visibilitys: visibility.distanceSm ,
-			windSpeed: (wind.speedKts * 1.15077945).toFixed(3),
-			windDirection: HelpersFunction.windDirection(wind),
-			forecastStartTime_1: forecast_1.period.dateStart,
-			forecastWindSpeed_1: (forecast_1.wind.speedKts * 1.15077945).toFixed(3),
-			forecastWindDirection_1: forecast_1.wind.direction,
-			forecastStartTime_2: HelpersFunction.testPeriod(forecast_2),
-			forecastWindSpeed_2: HelpersFunction.testWindSpeed(forecast_2),
-			forecastWindDirection_2: HelpersFunction.testWindDirection(forecast_2),
-			error: ''
-			});
-		} else {
-			this.setState({
-			identifier: undefined,
-			name: undefined,
-			runways: undefined,
-			latitude: undefined,
-			longitude: undefined,
-			temp: undefined,
-			relativeHumidity: undefined,
-			cloudCoverage: undefined,
-			visibilitys: undefined,
-			windSpeed: undefined,
-			windDirection: undefined,
-			forecastStartTime_1: undefined,
-			forecastWindSpeed_1: undefined,
-			forecastWindDirection_1: undefined,
-			forecastStartTime_2: undefined,
-			forecastWindSpeed_2: undefined,
-			forecastWindDirection_2: undefined,	
-			error: 'Please Enter the Value.'
-			});
-		}
+
+	handleFormSubmit = (event) => {
+		event.preventDefault();
+		const identifier = event.target.elements.identifier.value;
+		this.props.fetchAirportData(identifier);
+		this.props.fetchAirportWeather(identifier);
 	}
+
 	render() {
 		return(
             <div className="wrapper">
@@ -97,26 +28,26 @@ class App extends Component {
                                 <Titles />
                             </div>
                             <div className="col-xs-7 form-container">
-                                <Form getAirportData={this.getAirportData}/>
+                                <Form getAirportData={this.handleFormSubmit}/>
                                 <AirportInfo 
-                                error={this.state.error}
-                                identifier={this.state.identifier}
-                                name={this.state.name}
-                                runways={this.state.runways}
-                                latitude={this.state.latitude}
-                                longitude={this.state.longitude}
-                                temp={this.state.temp}
-                                relativeHumidity={this.state.relativeHumidity}
-                                cloudCoverage={this.state.cloudCoverage}
-                                visibilitys={this.state.visibilitys}
-                                windSpeed={this.state.windSpeed}
-                                windDirection={this.state.windDirection}
-                                forecastStartTime_1={this.state.forecastStartTime_1}
-                                forecastStartTime_2={this.state.forecastStartTime_2}
-                                forecastWindSpeed_1={this.state.forecastWindSpeed_1}
-                                forecastWindSpeed_2={this.state.forecastWindSpeed_2}
-                                forecastWindDirection_1={this.state.forecastWindDirection_1}
-                                forecastWindDirection_2={this.state.forecastWindDirection_2}
+                                // error={this.props.error}
+                                identifier={this.props.information.identifier}
+                                name={this.props.information.name}
+                                runways={this.props.information.runways}
+                                latitude={this.props.information.latitude}
+                                longitude={this.props.information.longitude}
+                                temp={this.props.weather.temp}
+                                relativeHumidity={this.props.weather.relativeHumidity}
+                                cloudCoverage={this.props.weather.cloudCoverage}
+                                visibilitys={this.props.weather.visibilitys}
+                                windSpeed={this.props.weather.windSpeed}
+                                windDirection={this.props.weather.windDirection}
+                                forecastStartTime_1={this.props.weather.forecastStartTime_1}
+                                forecastStartTime_2={this.props.weather.forecastStartTime_2}
+                                forecastWindSpeed_1={this.props.weather.forecastWindSpeed_1}
+                                forecastWindSpeed_2={this.props.weather.forecastWindSpeed_2}
+                                forecastWindDirection_1={this.props.weather.forecastWindDirection_1}
+                                forecastWindDirection_2={this.props.weather.forecastWindDirection_2}
                                 />
                             </div>
                         </div>
@@ -127,7 +58,18 @@ class App extends Component {
 	}
 };
 
+const MapStateToProps = state => {
+	return {
+		information: state.information,
+		weather: state.weather
+	}
+}
+
+const MapDispatchToProps = dispatch => ({
+	fetchAirportData: (airportIcao) => dispatch(fetchAirportData(airportIcao)),
+	fetchAirportWeather: (airportIcao) => dispatch(fetchAirportWeather(airportIcao)),
+})
 
 				
 
-export default App;
+export default connect(MapStateToProps, MapDispatchToProps)(App);

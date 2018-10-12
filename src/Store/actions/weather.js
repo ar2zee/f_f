@@ -1,5 +1,6 @@
-import actions from './actionTypes';
+import * as actions from './actionTypes';
 
-export const fetchAirportWeather = () => ({
-    type: actions.FETCH_AIRPORT_WEATHER_START
+export const fetchAirportWeather = (airportIcao) => ({
+    type: actions.FETCH_WEATHER_DATA_START,
+    airportIcao
 })
