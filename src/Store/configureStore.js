@@ -1,7 +1,6 @@
 import {createStore, combineReducers, compose, applyMiddleware} from 'redux';
 import createSagaMiddleware from 'redux-saga';
 
-import forecastReducer from './reducers/forecast';
 import weatherReducer from './reducers/weather';
 import informationReducer from './reducers/information';
 import errorsReducer from "./reducers/errors";
@@ -14,9 +13,8 @@ export default () => {
     const store = createStore(
         combineReducers({
             info: informationReducer,
-            error: errorsReducer,
             weather: weatherReducer,
-            forecast: forecastReducer
+            error: errorsReducer
         }),
         composeEnhancers(applyMiddleware(sagaMiddleware))
     );

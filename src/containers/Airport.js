@@ -3,7 +3,7 @@ import React, {Component} from "react";
 import Titles from "../components/Title";
 import Form from "../components/Form";
 import AirportInfo from "../components/AirportInfo";
-import { AirportsAPI } from '../api/AirportsAPI';
+import * as AirportsAPI from '../api/AirportsAPI';
 import * as HelpersFunction from '../utilities/Utility';
 
 
