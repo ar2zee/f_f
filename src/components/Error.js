@@ -4,7 +4,7 @@ const Error = props => {
     return (
         <React.Fragment>
             { 
-			props.error && <p className="airportInfo__error"> { props.error }</p>
+			props.errors && <p className="airportInfo__error"> { props.errors }</p>
 		    }
         </React.Fragment>
     )

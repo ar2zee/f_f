@@ -5,7 +5,8 @@ let initialState = {
     name: undefined,
     runways: undefined,
     latitude: undefined,
-    longitude: undefined
+    longitude: undefined,
+    errors: undefined
 }
 
 export default (state = initialState, action)  => {
@@ -20,6 +21,18 @@ export default (state = initialState, action)  => {
                 runways: runways,
                 latitude: latitude,
                 longitude: longitude,
+                errors: undefined
+            }
+            
+        case actions.FETCH_AIRPORT_DATA_FAILED:
+            return {
+                ...state,
+                identifier: undefined,
+                name: undefined,
+                runways: undefined,
+                latitude: undefined,
+                longitude: undefined,
+                errors: action.errors
             }
         default:
             return state;

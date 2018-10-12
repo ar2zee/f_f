@@ -3,7 +3,6 @@ import createSagaMiddleware from 'redux-saga';
 
 import weatherReducer from './reducers/weather';
 import informationReducer from './reducers/information';
-import errorsReducer from "./reducers/errors";
 import {watchSagas} from './sagas/index';
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
@@ -13,8 +12,7 @@ export default () => {
     const store = createStore(
         combineReducers({
             information: informationReducer,
-            weather: weatherReducer,
-            error: errorsReducer
+            weather: weatherReducer
         }),
         composeEnhancers(applyMiddleware(sagaMiddleware))
     );

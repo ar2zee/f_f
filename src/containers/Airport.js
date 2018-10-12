@@ -4,18 +4,21 @@ import {connect} from 'react-redux';
 import Titles from "../components/Title";
 import Form from "../components/Form";
 import AirportInfo from "../components/AirportInfo";
-import {fetchAirportData, fetchAirportWeather} from '../store/actions/index';
+import {fetchAirportData, fetchAirportWeather, fetchAirportError, fetchAirportWeatherError} from '../store/actions/index';
 
 
 class App extends Component {
-  
-
 
 	handleFormSubmit = (event) => {
 		event.preventDefault();
 		const identifier = event.target.elements.identifier.value;
-		this.props.fetchAirportData(identifier);
-		this.props.fetchAirportWeather(identifier);
+		if(identifier.length === 0) {
+            this.props.fetchAirportError('Please Enter Value');
+            this.props.fetchAirportWeatherError('Please Enter Value');
+		} else  {
+			this.props.fetchAirportData(identifier);
+            this.props.fetchAirportWeather(identifier);
+		}
 	}
 
 	render() {
@@ -30,7 +33,7 @@ class App extends Component {
                             <div className="col-xs-7 form-container">
                                 <Form getAirportData={this.handleFormSubmit}/>
                                 <AirportInfo 
-                                // error={this.props.error}
+                                errors={this.props.weather.errors}
                                 identifier={this.props.information.identifier}
                                 name={this.props.information.name}
                                 runways={this.props.information.runways}
@@ -61,13 +64,15 @@ class App extends Component {
 const MapStateToProps = state => {
 	return {
 		information: state.information,
-		weather: state.weather
+        weather: state.weather
 	}
 }
 
 const MapDispatchToProps = dispatch => ({
 	fetchAirportData: (airportIcao) => dispatch(fetchAirportData(airportIcao)),
 	fetchAirportWeather: (airportIcao) => dispatch(fetchAirportWeather(airportIcao)),
+    fetchAirportError: (errors) => dispatch(fetchAirportError(errors)),
+    fetchAirportWeatherError: (errors) => dispatch(fetchAirportWeatherError(errors)),
 })
 
 				

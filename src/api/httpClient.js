@@ -6,11 +6,11 @@ const get = (url) => {
     return axios(url)
 }
 
+
+/* headers does'nt work. Preflight failed */
 // const get = (url) => {
 //     return axios(url, { headers: {
-//     "Access-Control-Allow-Origin": "*", 
-//     "Access-Control-Allow-Methods": "GET",
-//     "Access-Control-Allow-Headers": "Origin, Content-Type, X-Auth-Token"} } )
+//     "Access-Control-Allow-Origin": "*" }})
 // }
 
 const HttpClient = {
