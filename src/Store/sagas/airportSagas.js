@@ -8,9 +8,10 @@ export function* fetchAirportDataSaga(action) {
 		const data = yield response.data.airport.results;
 		yield put({ type: actions.FETCH_AIRPORT_DATA_SUCCESS, data: data });
 	} catch (errors) {
-		yield put({ type: actions.FETCH_AIRPORT_DATA_FAILED, errors: errors});
+		yield put({ type: actions.FETCH_AIRPORT_DATA_FAILED, data: errors });
 	}
 };
+
 
 export function* fetchAirportWeatherSaga(action) {
 	try {
@@ -18,6 +19,6 @@ export function* fetchAirportWeatherSaga(action) {
 		const data = yield response.data.report;
 		yield put({ type: actions.FETCH_WEATHER_DATA_SUCCESS, data: data });
 	} catch (errors) {
-		yield put({ type: actions.FETCH_WEATHER_DATA_FAILED, errors: errors});
+		yield put({ type: actions.FETCH_WEATHER_DATA_FAILED, data: errors });
 	}
 };

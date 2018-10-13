@@ -21,16 +21,10 @@ export default (state = initialState, action)  => {
     switch (action.type) {
         case actions.FETCH_WEATHER_DATA_SUCCESS:
 
-       
-
         if(action.data.conditions) {
-            var {tempC, relativeHumidity, cloudLayers, visibility, wind} = action.data.conditions;
-        } else {
-             action.data.conditions = '';
-        }
-
-        const forecast_1 = action.data.forecast.conditions[1];
-    	const forecast_2 = action.data.forecast.conditions[2];
+            const {tempC, relativeHumidity, cloudLayers, visibility, wind} = action.data.conditions;
+            const forecast_1 = action.data.forecast.conditions[1];
+    	    const forecast_2 = action.data.forecast.conditions[2];
     
             return {
                 ...state,
@@ -48,7 +42,24 @@ export default (state = initialState, action)  => {
                 forecastWindDirection_2: HelpersFunction.testWindDirection(forecast_2),
                 errors: undefined
             }
-            
+        } else {
+             return {
+                ...state,
+                temp: undefined,
+                relativeHumidity: undefined,
+                cloudCoverage: undefined,
+                visibilitys: undefined,
+                windSpeed: undefined,
+                windDirection: undefined,
+                forecastStartTime_1: undefined,
+                forecastWindSpeed_1: undefined,
+                forecastWindDirection_1: undefined,
+                forecastStartTime_2: undefined,
+                forecastWindSpeed_2: undefined,
+                forecastWindDirection_2: undefined,
+                errors: "This ICAO doesn't have weather values"
+             };
+        }
         case actions.FETCH_WEATHER_DATA_FAILED:
             return {
                 ...state,
@@ -64,7 +75,7 @@ export default (state = initialState, action)  => {
                 forecastStartTime_2: undefined,
                 forecastWindSpeed_2: undefined,
                 forecastWindDirection_2: undefined,
-                errors: action.errors
+                errors: 'Please provide a valid ICAO'
             }
         default:
             return state;

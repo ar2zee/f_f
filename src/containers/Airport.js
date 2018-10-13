@@ -8,17 +8,11 @@ import {fetchAirportData, fetchAirportWeather, fetchAirportError, fetchAirportWe
 
 
 class App extends Component {
-
-	handleFormSubmit = (event) => {
+    handleFormSubmit = (event) => {
 		event.preventDefault();
-		const identifier = event.target.elements.identifier.value;
-		if(identifier.length === 0) {
-            this.props.fetchAirportError('Please Enter Value');
-            this.props.fetchAirportWeatherError('Please Enter Value');
-		} else  {
-			this.props.fetchAirportData(identifier);
-            this.props.fetchAirportWeather(identifier);
-		}
+		const identifier = event.target.elements.identifier.value;          
+        this.props.fetchAirportWeather(identifier);
+        this.props.fetchAirportData(identifier);
 	}
 
 	render() {
@@ -71,8 +65,8 @@ const MapStateToProps = state => {
 const MapDispatchToProps = dispatch => ({
 	fetchAirportData: (airportIcao) => dispatch(fetchAirportData(airportIcao)),
 	fetchAirportWeather: (airportIcao) => dispatch(fetchAirportWeather(airportIcao)),
-    fetchAirportError: (errors) => dispatch(fetchAirportError(errors)),
-    fetchAirportWeatherError: (errors) => dispatch(fetchAirportWeatherError(errors)),
+    fetchAirportError: () => dispatch(fetchAirportError()),
+    fetchAirportWeatherError: () => dispatch(fetchAirportWeatherError()),
 })
 
 				

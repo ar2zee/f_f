@@ -32,7 +32,7 @@ export default (state = initialState, action)  => {
                 runways: undefined,
                 latitude: undefined,
                 longitude: undefined,
-                errors: action.errors
+                errors: 'Please provide a valid ICAO'
             }
         default:
             return state;
